@@ -4,7 +4,7 @@ class Retry_uptoTest < MiniTest::Unit::TestCase
 
   class FooError < Exception; end
 
-  # raises ZeroDivisionError in the two first hits
+  # raises FooError in the two first hits
   class Target
     attr_accessor :hits
     def initialize; @hits = 0; end
