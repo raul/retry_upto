@@ -3,7 +3,7 @@ require File.expand_path("./lib/retry_upto")
 
 Gem::Specification.new do |s|
   s.name        = "retry_upto"
-  s.version     = "1.0"
+  s.version     = "1.1"
   s.authors     = ["Raul Murciano", "Glenn Gillen", "Pedro Belo", "Jaime Iniesta", "Lleïr Borras", "Aitor García Rey"]
   s.email       = ["raul@murciano.net"]
   s.homepage    = "http://github.com/raul/retry_upto"
