@@ -29,20 +29,24 @@ Retries up to 5 times, waits 2 seconds between attempts:
 
 ### Varying waiting time between attempts
 
+If you pass an array to the interval option, the first element will be the
+number of seconds for the first waiting, and the second element a numeric
+multiplier or a lambda to calculate the next waiting time.
+
 Retries up to 5 times, waits 1 second after the first attempt and increases
 the time between the following attempts (2, 4, 8, ...):
 
-    retry_upto(5, :interval => 1, :growth => 2)
+    retry_upto(5, :interval => [1, 2])
 
 Retries up to 5 times, waits 1 second after the first attempt and decreases
 the time between the following attempts (0.5, 0.25, 0.125, ...):
 
-    retry_upto(5, :interval => 1, :growth => 0.5)
+    retry_upto(5, :interval => [1, 0.5])
 
 Retries up to 5 times, waits 1 second after the first attempt and increases
 randomly the time between the following attempts:
 
-    retry_upto(5, :interval => 1, :growth => lambda{ |x| x + rand(3) } )
+    retry_upto(5, :interval => [1, lambda{ |x| x + rand(3) }] )
 
 ### Retrying only when certain Exceptions get raised
 

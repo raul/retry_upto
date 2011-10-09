@@ -4,6 +4,11 @@ def retry_upto(max_retries = 1, options = {})
   yield
 rescue *(options[:rescue] || Exception)
   raise if (max_retries -= 1) == 0
+
+  if options[:interval].is_a?(Array) && options[:interval].length == 2
+    options[:interval], options[:growth] = *options[:interval]
+  end
+
   sleep(options[:interval] || 0)
   if options[:growth].respond_to?('*')
     options[:interval] = options[:interval] * options[:growth]

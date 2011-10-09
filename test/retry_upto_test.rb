@@ -60,13 +60,13 @@ class Retry_uptoTest < MiniTest::Unit::TestCase
   def test_inverval_can_be_multiplied_by_an_integer_growth
     self.expects(:sleep).times(1).with(5)
     self.expects(:sleep).times(1).with(15)
-    retry_upto(3, :interval => 5, :growth => 3){ @target.foo! }
+    retry_upto(3, :interval => [5, 3]){ @target.foo! }
   end
 
   def test_grow_for_inverval_between_attempts_can_be_defined_with_a_lambda
     self.expects(:sleep).times(1).with(5)
     self.expects(:sleep).times(1).with(7)
-    retry_upto(3, :interval => 5, :growth => lambda{ |t| t + 2 }){ @target.foo! }
+    retry_upto(3, :interval => [5, lambda{ |t| t + 2 }]){ @target.foo! }
   end
 
   # exceptions
