@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    retry_upto (1.0)
+    retry_upto (1.1)
 
 GEM
   remote: http://rubygems.org/
