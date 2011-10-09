@@ -4,11 +4,16 @@ def retry_upto(max_retries = 1, options = {})
   yield
 rescue *(options[:rescue] || Exception)
   raise if (max_retries -= 1) == 0
+
+  if Array(options[:interval]).length == 2
+    options[:interval], growth = *options[:interval]
+  end
+
   sleep(options[:interval] || 0)
-  if options[:growth].respond_to?('*')
-    options[:interval] = options[:interval] * options[:growth]
-  elsif options[:growth].respond_to?(:call)
-    options[:interval] = options[:growth].call(options[:interval])
+  if growth.respond_to?('*')
+    options[:interval] *= growth
+  elsif growth.respond_to?(:call)
+    options[:interval]  = growth.call(options[:interval])
   end
   retry
 end
