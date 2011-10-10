@@ -1,6 +1,6 @@
 require './test/test_helper'
 
-class Retry_uptoTest < MiniTest::Unit::TestCase
+class RetryUptoTest < MiniTest::Unit::TestCase
 
   class FooError < Exception; end
   class BarError < Exception; end
@@ -46,7 +46,7 @@ class Retry_uptoTest < MiniTest::Unit::TestCase
   # interval between attempts
 
   def test_there_is_no_interval_between_attempts_by_default
-    self.expects(:sleep).times(3).with(0).returns(nil)
+    self.expects(:sleep).never
     retry_upto(4){ @target.foo! }
   end
 
@@ -55,20 +55,11 @@ class Retry_uptoTest < MiniTest::Unit::TestCase
     retry_upto(4, :interval => 5){ @target.foo! }
   end
 
-  # interval growth between attempts
-
-  def test_inverval_can_be_multiplied_by_an_integer_growth
-    self.expects(:sleep).times(1).with(5)
-    self.expects(:sleep).times(1).with(15)
-    self.expects(:sleep).times(1).with(45)
-    retry_upto(4, :interval => 5, :growth => 3){ @target.foo! }
-  end
-
-  def test_grow_for_inverval_between_attempts_can_be_defined_with_a_lambda
-    self.expects(:sleep).times(1).with(5)
-    self.expects(:sleep).times(1).with(7)
+  def test_different_intervals_can_be_defined_with_a_lambda
+    self.expects(:sleep).times(1).with(3)
+    self.expects(:sleep).times(1).with(6)
     self.expects(:sleep).times(1).with(9)
-    retry_upto(4, :interval => 5, :growth => lambda{ |t| t + 2 }){ @target.foo! }
+    retry_upto(4, :interval => lambda{ |attempt| attempt * 3 }){ @target.foo! }
   end
 
   # exceptions

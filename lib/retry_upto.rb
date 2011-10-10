@@ -1,20 +1,19 @@
 # See README.md for usage explanations
 
-def retry_upto(max_retries = 1, options = {})
+def retry_upto(max_retries = 1, opts = {})
   yield
-rescue *(options[:rescue] || Exception)
-  raise if (max_retries -= 1) == 0
-  sleep(options[:interval] || 0)
-  if options[:growth].respond_to?('*')
-    options[:interval] = options[:interval] * options[:growth]
-  elsif options[:growth].respond_to?(:call)
-    options[:interval] = options[:growth].call(options[:interval])
+rescue *(opts[:rescue] || Exception)
+  attempt = attempt ? attempt+1 : 1
+  raise if (attempt == max_retries)
+  if interval = opts[:interval]
+    secs = interval.respond_to?(:call) ? interval.call(attempt) : interval
+    sleep(secs)
   end
   retry
 end
 
 class Enumerator
-  def retry(options = {}, &blk)
-    retry_upto(self.count, options, &blk)
+  def retry(opts = {}, &blk)
+    retry_upto(self.count, opts, &blk)
   end
 end
